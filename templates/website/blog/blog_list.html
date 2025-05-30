@@ -1,0 +1,46 @@
+<!-- Blog List Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:'Blog' }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+        .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        h1, h2 { color: #333; }
+        ul.post-list { list-style: none; padding: 0; }
+        ul.post-list li { border-bottom: 1px solid #eee; padding: 1.5rem 0; }
+        ul.post-list li:last-child { border-bottom: none; }
+        .post-title { margin: 0 0 0.5rem 0; color: #007bff; }
+        .post-meta { color: #888; font-size: 0.95em; margin-bottom: 0.5rem; }
+        .post-excerpt { margin-bottom: 1rem; }
+        .read-more { color: #007bff; text-decoration: none; font-weight: bold; }
+        .read-more:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ title|default:'Blog' }}</h1>
+        <p>{{ description|default:'Latest posts from our blog.' }}</p>
+        <ul class="post-list">
+            {% for post in blog_posts %}
+                <li>
+                    <h2 class="post-title">{{ post.title }}</h2>
+                    <div class="post-meta">
+                        <span>By {{ post.author }}</span> |
+                        <span>{{ post.published_at|date:'F j, Y' }}</span>
+                        {% if post.category %}| <span>Category: {{ post.category }}</span>{% endif %}
+                    </div>
+                    <div class="post-excerpt">
+                        {{ post.excerpt|default:post.content|truncatewords:40 }}
+                    </div>
+                    <a class="read-more" href="{% url 'blog:blog-post-detail' post.slug %}">Read more &rarr;</a>
+                </li>
+            {% empty %}
+                <li>No blog posts found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

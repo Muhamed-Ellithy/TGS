@@ -1,0 +1,67 @@
+<!-- Blog Post Detail Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog_post.title }} | Blog</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+        .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        h1 { color: #333; margin-bottom: 0.5rem; }
+        .meta { color: #888; font-size: 0.95em; margin-bottom: 1.5rem; }
+        .cover-image { max-width: 100%; border-radius: 6px; margin-bottom: 1.5rem; }
+        .content { margin-bottom: 2rem; line-height: 1.7; color: #222; }
+        .tags { margin-bottom: 1.5rem; }
+        .tag { display: inline-block; background: #e3e8f0; color: #2d3748; border-radius: 3px; padding: 0.2em 0.7em; margin-right: 0.5em; font-size: 0.95em; text-decoration: none; }
+        .comments { margin-top: 2.5rem; }
+        .comment { border-top: 1px solid #eee; padding: 1rem 0; }
+        .comment:first-child { border-top: none; }
+        .comment-author { font-weight: bold; color: #007bff; }
+        .comment-date { color: #888; font-size: 0.9em; }
+        .no-comments { color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ blog_post.title }}</h1>
+        <div class="meta">
+            <span>By {{ blog_post.author }}</span> |
+            <span>{{ blog_post.published_at|date:'F j, Y' }}</span>
+            {% if blog_post.category %}| <span>Category: {{ blog_post.category }}</span>{% endif %}
+        </div>
+        {% if blog_post.cover_image %}
+            <img class="cover-image" src="{{ blog_post.cover_image.url }}" alt="Cover image for {{ blog_post.title }}">
+        {% endif %}
+        <div class="content">
+            {{ blog_post.content|linebreaks }}
+        </div>
+        {% if blog_post.tags.all %}
+        <div class="tags">
+            <strong>Tags:</strong>
+            {% for tag in blog_post.tags.all %}
+                <a class="tag" href="{% url 'blog:tag-detail' tag.slug %}">{{ tag.name }}</a>
+            {% empty %}
+                <span class="tag">No tags</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="comments">
+            <h2>Comments</h2>
+            {% if blog_post.comments.all %}
+                {% for comment in blog_post.comments.all %}
+                    <div class="comment">
+                        <span class="comment-author">{{ comment.name }}</span>
+                        <span class="comment-date">on {{ comment.created_at|date:'F j, Y, g:i a' }}</span>
+                        <div>{{ comment.message|linebreaks }}</div>
+                    </div>
+                {% empty %}
+                    <div class="no-comments">No comments yet.</div>
+                {% endfor %}
+            {% else %}
+                <div class="no-comments">No comments yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

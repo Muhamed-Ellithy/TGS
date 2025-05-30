@@ -16,8 +16,8 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
-from .views import (LandingView, AboutView, ContactView, BlogView)
+from django.urls import path ,include
+from .views import LandingView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,11 +26,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", LandingView.as_view(), name="landing-page"),
-    path("about/", AboutView.as_view(), name="about-page"),
-    path("contact/", ContactView.as_view(), name="contact-page"),
-    path("blog/", BlogView.as_view(), name="blog-page"),
-    path("brands/", BrandsView.as_view(), name="brands-page"),
-    path("services/", ServicesView.as_view(), name="services-page"),
-
+    path("blog/", include("website.blog.urls") ),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
